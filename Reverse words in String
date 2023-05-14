@@ -1,0 +1,60 @@
+
+Question - Given an input string s, reverse the order of the words.
+A word is defined as a sequence of non-space characters. The words in s will be separated by at least one space.
+Return a string of the words in reverse order concatenated by a single space.
+Example 1:
+Input: s = "the sky is blue"
+Output: "blue is sky the"
+
+Approach- We can reverse each word of a string by the help of reverse(), split() and substring() methods. 
+By using reverse() method of StringBuilder class, we can reverse given string. By the help of split("\\s") method, we can get all words in an array.
+To get the first character, we can use substring() or charAt() method.
+
+Solution-
+class Solution {
+  public String reverseWords(String s) {
+    StringBuilder sb = new StringBuilder(s).reverse(); 
+    reverseWords(sb, sb.length());                     
+    return cleanSpaces(sb, sb.length());               
+  }
+
+  private void reverseWords(StringBuilder sb, int n) {
+    int i = 0;
+    int j = 0;
+
+    while (i < n) {
+      while (i < j || i < n && sb.charAt(i) == ' ') 
+        ++i;
+      while (j < i || j < n && sb.charAt(j) != ' ') 
+        ++j;
+      reverse(sb, i, j - 1); 
+    }
+  }
+
+  
+  private String cleanSpaces(StringBuilder sb, int n) {
+    int i = 0;
+    int j = 0;
+
+    while (j < n) {
+      while (j < n && sb.charAt(j) == ' ') 
+        ++j;
+      while (j < n && sb.charAt(j) != ' ') 
+        sb.setCharAt(i++, sb.charAt(j++));
+      while (j < n && sb.charAt(j) == ' ') 
+        ++j;
+      if (j < n) 
+        sb.setCharAt(i++, ' ');
+    }
+
+    return sb.substring(0, i).toString();
+  }
+
+  private void reverse(StringBuilder sb, int l, int r) {
+    while (l < r) {
+      final char temp = sb.charAt(l);
+      sb.setCharAt(l++, sb.charAt(r));
+      sb.setCharAt(r--, temp);
+    }
+  }
+}
