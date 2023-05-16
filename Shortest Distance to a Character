@@ -1,0 +1,30 @@
+Question-
+Given a string s and a character c that occurs in s, return an array of integers answer where answer.length == s.length and answer[i]
+is the distance from index i to the closest occurrence of character c in s.
+The distance between two indices i and j is abs(i - j), where abs is the absolute value function.
+ 
+Example- 
+Input: s = "aaab", c = "b"
+Output: [3,2,1,0]
+
+Solution-
+class Solution {
+    public int[] shortestToChar(String S, char C) {
+        int N = S.length();
+        int[] ans = new int[N];
+        int prev = Integer.MIN_VALUE / 2;
+
+        for (int i = 0; i < N; ++i) {
+            if (S.charAt(i) == C) prev = i;
+            ans[i] = i - prev;
+        }
+
+        prev = Integer.MAX_VALUE / 2;
+        for (int i = N-1; i >= 0; --i) {
+            if (S.charAt(i) == C) prev = i;
+            ans[i] = Math.min(ans[i], prev - i);
+        }
+
+        return ans;
+    }
+}
