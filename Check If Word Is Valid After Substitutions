@@ -1,0 +1,30 @@
+Question-
+Given a string s, determine if it is valid.
+
+A string s is valid if, starting with an empty string t = "", you can transform t into s after performing the following operation any number of times:
+
+Insert string "abc" into any position in t. More formally, t becomes tleft + "abc" + tright, where t == tleft + tright. Note that tleft and tright may be empty.
+Return true if s is a valid string, otherwise, return false.
+
+Solution-
+class Solution {
+  public boolean isValid(String s) {
+    Deque<Character> stack = new ArrayDeque<>();
+
+    for (final char c : s.toCharArray())
+      if (c == 'c') {
+        if (stack.size() < 2)
+          return false;
+        if (stack.peek() != 'b')
+          return false;
+        stack.pop();
+        if (stack.peek() != 'a')
+          return false;
+        stack.pop();
+      } else {
+        stack.push(c);
+      }
+
+    return stack.isEmpty();
+  }
+}
