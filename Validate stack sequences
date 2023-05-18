@@ -1,0 +1,19 @@
+Question-
+Given two integer arrays pushed and popped each with distinct values, return true if this could have been the result of a 
+sequence of push and pop operations on an initially empty stack, or false otherwise.
+class Solution {
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+        int len = pushed.length, i = 0, j = 0, s = 0;
+        while (i < len)
+            if (s >= 0 && popped[j] == pushed[s]) {
+                j++;
+                s--;
+            } else {
+                s++;
+                i++;
+                if (i < len) pushed[s] = pushed[i];
+            }
+        return s == 0;
+    }
+}Solution-
+ 
