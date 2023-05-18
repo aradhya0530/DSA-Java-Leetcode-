@@ -1,0 +1,48 @@
+Question-
+You are given the head of a linked list.
+
+Remove every node which has a node with a strictly greater value anywhere to the right side of it.
+
+Return the head of the modified linked list.
+Solution-
+class Solution {
+public:
+    ListNode* reverse(ListNode* head){
+        ListNode* previous = NULL;
+        ListNode* current = head;
+
+        while(current != NULL){
+            ListNode* temp = current->next;
+            current->next = previous;
+            previous = current;
+            current = temp;
+        }
+
+        return previous;
+    }
+
+    ListNode* removeNodes(ListNode* head) {
+        if(head == NULL || head->next == NULL) {
+            return head;
+        }
+
+        ListNode* current = reverse(head);
+        ListNode* answer = current;
+
+        int val = current->val;
+
+        while(current != NULL && current->next != NULL){
+            while(current != NULL && current->next != NULL && current->next->val < val){
+                current->next = current->next->next;
+            }
+
+            if(current != NULL && current->next != NULL){
+                val = max(val, current->next->val);
+                current = current->next;
+            }
+
+        }
+
+        return reverse(answer);
+    }
+};
