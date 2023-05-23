@@ -1,0 +1,54 @@
+Question-
+Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.
+
+Solution-
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        
+        Map<Integer,Integer> presentInHeap = new HashMap<>();
+        Map<Integer,Integer> notInHeap = new HashMap<>();
+        
+        PriorityQueue<Integer> heap = new PriorityQueue<>(
+            (a,b) -> presentInHeap.getOrDefault(a,0) - presentInHeap.getOrDefault(b,0) );
+        
+		// For n elements, adding into heap will take O(K) time, hence the total complexity would be O(nk)
+        for(int i=0;i<nums.length;i++){
+             addInHeap(presentInHeap,notInHeap,heap, k,nums[i]);
+        }
+        return getTopKElementsFromHeap(heap);
+    }
+    
+   
+    public void addInHeap(Map<Integer,Integer> presentInHeap,
+                          Map<Integer,Integer> notInHeap,
+                          PriorityQueue<Integer> heap,
+                          int k,
+                          int element){
+        
+        if(presentInHeap.containsKey(element)){
+            presentInHeap.put(element,presentInHeap.get(element)+1);
+			
+            heap.remove(element);
+			
+            heap.add(element);
+        }else{
+            presentInHeap.put(element,notInHeap.getOrDefault(element,0) + 1);
+			
+            heap.add(element);
+            if(heap.size() > k){
+                int poppedElement = heap.poll(); // O(K) for removing the top element and heapify operation.
+                notInHeap.put(poppedElement,presentInHeap.get(poppedElement));
+                presentInHeap.remove(poppedElement);
+            }
+        }
+    }
+    
+    public int[] getTopKElementsFromHeap(PriorityQueue<Integer> heap){
+        int i=0;
+        int topKElements[] = new int[heap.size()];
+        for(Integer element: heap){
+            topKElements[i++] = element;
+        }
+        return topKElements;
+    }
+}
